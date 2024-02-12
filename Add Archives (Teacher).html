@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Archive</title>
+    <style>
+        body {
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            background-image:linear-gradient(to right,#251f33, #fa1e4e, #251f33);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .form-container {
+            background-color: #fff;
+            width: 50%;
+            padding: 5%;
+            border: 8% solid #000;
+            margin-top: 1%;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 20px;
+        }
+
+        button {
+            background-color: #007BFF;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="form-container">
+        <h2>Add Archive</h2>
+        <form id="archiveForm" action="archives_details(teacher).php" method="post">
+            <label for="archiveName">Archive Name:</label>
+            <input type="text" id="archiveName" name="archiveName" required>
+
+            <label for="archiveDescription">Archive Description:</label>
+            <input type="text" id="archiveDescription" name="archiveDescription" required>
+
+            <label for="archiveDate">Archive Date:</label>
+            <input type="date" id="archiveDate" name="archiveDate" required>
+
+            <label for="archiveId">Archive ID:</label>
+            <input type="text" id="archiveId" name="archiveId" required>
+
+            <label for="authorName">Archive By:</label>
+            <input type="text" id="authorName" name="authorName" required>
+
+            <button type="submit" onclick="ManageArchives()">Return</button>
+            <button type="submit" onclick="UploadArchive()">Upload</button>
+        </form>
+    </div>
+
+    <script>
+        function ManageArchives() {
+            window.location.href = 'Manage Archives (Teacher).html'
+        }
+        </script>
+</body>
+
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Dependency</title>
+    <style>
+        body {
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            background-image:linear-gradient(to right,#251f33, #fa1e4e, #251f33);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .form-container {
+            background-color: #fff;
+            width: 50%;
+            padding: 5%;
+            border: 8% solid #000;
+            margin-top: 1%;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 20px;
+        }
+
+        button {
+            background-color: #007BFF;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="form-container">
+        <h2>Add Dependency</h2>
+        <form id="dependencyForm" action="dependencies_details (teacher).php" method="post">
+            <label for="dependencyName">Dependency Name:</label>
+            <input type="text" id="dependencyName" name="dependencyName" required>
+
+            <label for="dependencyDescription">Dependency Description:</label>
+            <input type="text" id="dependencyDescription" name="dependencyDescription" required>
+
+            <label for="dependencyDate">Dependency Date:</label>
+            <input type="date" id="dependencyDate" name="dependencyDate" required>
+
+            <label for="dependencyId">Dependency ID:</label>
+            <input type="text" id="dependencyId" name="dependencyId" required>
+
+            <label for="dependencyRelation">Dependency To:</label>
+            <input type="text" id="dependencyRelation" name="dependencyRelation" required>
+
+            <button type="submit" onclick="ManageDependencies()">Return</button>
+            <button type="submit" onclick="UploadDependency()">Upload</button>
+        </form>
+    </div>
+
+    <script>
+        function ManageDependencies() {
+            window.location.href = 'Manage Dependencies (Teacher).html'
+        }
+        </script>
+</body>
+
+</html>

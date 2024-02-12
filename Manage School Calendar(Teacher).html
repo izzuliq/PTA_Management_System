@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage School Calendar</title>
+    <style>
+        body {
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            background-image: linear-gradient(to right, #251f33, #fa1e4e, #251f33);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .title-box {
+            background-color: #f4f4f4;
+            padding: 1%;
+            border-radius: 8%;
+            text-align: center;
+            position: absolute;
+            top: 15%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border: 2px solid #000;
+        }
+
+        .home-button {
+            background-color: #007BFF;
+            color: #fff;
+            padding: 0.5%;
+            border: none;
+            border-radius: 8%;
+            cursor: pointer;
+            margin-top: 1.5%;
+            text-decoration: none;
+            display: inline-block;
+            position: absolute;
+            top: 7%;
+            left: 63.5%;
+        }
+
+        .logout-button {
+            background-color: #ff0000;
+            color: #fff;
+            padding: 0.5%;
+            border: none;
+            border-radius: 8%;
+            cursor: pointer;
+            margin-top: 1.2%;
+            text-decoration: none;
+            display: inline-block;
+            position: absolute;
+            top: 14%;
+            left: 63%;
+        }
+
+        .line {
+            width: 34.6%;
+            height: 0.2vw;
+            background-color: #000;
+            margin-bottom: 25%;
+        }
+
+        .box2 {
+            background-color: #fff;
+            width: 34.8%;
+            height: 50%;
+            border: 2px solid #000;
+            position: absolute;
+            top: 28.2%;
+            left: 32.4%;
+        }
+
+        .box2 {
+            font-size: 24px;
+        }
+
+        .box2 table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .box2 th,
+        .box2 td {
+            border: 1px solid #000;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .box2 th {
+            font-size: 1.2em;
+            background-color: #07cbee;
+        }
+
+        .box2 td:first-child,
+        .box2 td:last-child {
+            font-weight: bold;
+        }
+
+        .button-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .view-button {
+            background-color: #007BFF;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            color: #fff;
+            padding: 1.4% 4.95%;
+            border: 100% solid #000000;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            position: absolute;
+            top: 78.5%;
+            left: 32.4%;
+        }
+
+        .add-button {
+            background-color: #007BFF;
+            color: #fff;
+            padding: 1.4% 5.28%;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            border: 100% solid #000000;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            position: absolute;
+            top: 78.5%;
+            left: 44%;
+        }
+    </style>
+</head>
+
+<body>
+    <img src="Logo.png" alt="Description of the image" id="logoImage"
+        style="position: absolute; top: 4.5%; right: 62%; width: 10%; height: 20%;">
+    <div class="title-box">
+        <h1>SCHOOL CALENDAR</h1>
+    </div>
+    <a href="Admin Dashboard.html" class="home-button">HOME</a>
+    <a href="PTA Management System.html" class="logout-button">LOGOUT</a>
+    <div class="line"></div>
+    <div class="box"></div>
+    <div class="box2">
+        <table>
+            <thead>
+                <tr>
+                    <th>Sun</th>
+                    <th>Mon</th>
+                    <th>Tue</th>
+                    <th>Wed</th>
+                    <th>Thu</th>
+                    <th>Fri</th>
+                    <th>Sat</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>1</td>
+                    <td>2</td>
+                    <td>3</td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td>5</td>
+                    <td>6</td>
+                    <td>7</td>
+                    <td>8</td>
+                    <td>9</td>
+                    <td>10</td>
+                </tr>
+                <tr>
+                    <td>11</td>
+                    <td>12</td>
+                    <td>13</td>
+                    <td>14</td>
+                    <td>15</td>
+                    <td>16</td>
+                    <td>17</td>
+                </tr>
+                <tr>
+                    <td>18</td>
+                    <td>19</td>
+                    <td>20</td>
+                    <td>21</td>
+                    <td>22</td>
+                    <td>23</td>
+                    <td>24</td>
+                </tr>
+                <tr>
+                    <td>25</td>
+                    <td>26</td>
+                    <td>27</td>
+                    <td>28</td>
+                    <td>29</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+        <p style="text-align:center;font-style:italic;color:red;"></p>
+    </div>
+    <div class="button-container">
+        <a href="Manage Activity.html" class="view-button">View</a>
+        <a href="Add Activities (Teacher).html" class="add-button">Add</a>
+    </div>
+</body>
+
+</html>

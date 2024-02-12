@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dependency Details</title>
+    <style>
+        body {
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            background-image: linear-gradient(to right, #251f33, #fa1e4e, #251f33);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .form-container {
+            background-color: #fff;
+            width: 50%;
+            padding: 5%;
+            border: 8% solid #000;
+            margin-top: 1%;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 20px;
+        }
+
+        button {
+            background-color: #007BFF;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .details-container {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .detail-item {
+            margin-bottom: 20px;
+        }
+
+        .detail-box {
+            border: 1px solid #ccc;
+            padding: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="form-container" id="dependencyDetailsBox">
+    </div>
+
+    <script>
+        window.onload = function () {
+            // Fetch and display dependency details based on the dependencyId in the URL
+            var dependencyId = new URLSearchParams(window.location.search).get('dependencyId');
+            if (dependencyId) {
+                showDependencyDetails(dependencyId);
+            } else {
+                alert('Dependency ID not provided.');
+            }
+        };
+
+        function showDependencyDetails(dependencyId) {
+            var xhr = new XMLHttpRequest();
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    var dependencyDetails = JSON.parse(xhr.responseText);
+                    displayDependencyDetails(dependencyDetails);
+                }
+            };
+
+            xhr.open("GET", "get_dependency_details.php?dependencyId=" + dependencyId, true);
+            xhr.send();
+        }
+
+        function updateDependencyDetails(updatedDetails) {
+            var xhr = new XMLHttpRequest();
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4) {
+                    if (xhr.status == 200) {
+                        alert(xhr.responseText); // Display success message or handle accordingly
+                    } else {
+                        alert('Error updating dependency details.');
+                    }
+                }
+            };
+
+            xhr.open("POST", "update_dependency_details.php", true);
+            xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+            // Convert the updatedDetails object to a URL-encoded string
+            var params = Object.keys(updatedDetails).map(function (key) {
+                return encodeURIComponent(key) + '=' + encodeURIComponent(updatedDetails[key]);
+            }).join('&');
+
+            xhr.send(params);
+        }
+
+        function displayDependencyDetails(dependencyDetails) {
+            var dependencyDetailsBox = document.getElementById('dependencyDetailsBox');
+            dependencyDetailsBox.innerHTML = ''; // Clear existing content
+
+            // Create HTML elements to display details (customize based on your requirements)
+            var detailsHeading = document.createElement('h2');
+            detailsHeading.textContent = 'Dependency Details';
+
+            var detailsContainer = document.createElement('div');
+            detailsContainer.classList.add('details-container');
+
+            // Populate detailsContainer with the details from the dependencyDetails object
+            for (var key in dependencyDetails) {
+                if (dependencyDetails.hasOwnProperty(key)) {
+                    var detailItem = document.createElement('div');
+                    detailItem.classList.add('detail-item');
+
+                    var formattedKey = formatTitle(key);
+
+                    var label = document.createElement('label');
+                    label.textContent = formattedKey;
+
+                    var detailBox = document.createElement('div');
+                    detailBox.textContent = dependencyDetails[key];
+                    detailBox.classList.add('detail-box');
+                    detailBox.setAttribute('contentEditable', true); // Set the contentEditable attribute
+
+                    detailItem.appendChild(label);
+                    detailItem.appendChild(detailBox);
+
+                    detailsContainer.appendChild(detailItem);
+                }
+            }
+
+            dependencyDetailsBox.appendChild(detailsHeading);
+            dependencyDetailsBox.appendChild(detailsContainer);
+
+            // Add "Return" and "Update" buttons
+            var returnButton = document.createElement('button');
+            returnButton.textContent = 'Return';
+            returnButton.onclick = function () {
+                window.location.href = 'Manage Dependencies (Teacher).html';
+            };
+
+            var updateButton = document.createElement('button');
+            updateButton.textContent = 'Update';
+            updateButton.onclick = function () {
+                // Retrieve the updated content from the editable boxes
+                var updatedDetails = {};
+                var detailBoxes = document.querySelectorAll('.detail-box');
+                detailBoxes.forEach(function (box) {
+                    var key = box.previousSibling.textContent.trim(); // Get the label text
+                    updatedDetails[key] = box.textContent.trim(); // Get the edited content
+                });
+
+                // Add dependencyId to the updatedDetails object
+                updatedDetails['dependencyId'] = dependencyId;
+
+                // Send a POST request to the PHP file with the updated details
+                updateDependencyDetails(updatedDetails);
+            };
+
+            dependencyDetailsBox.appendChild(returnButton);
+            dependencyDetailsBox.appendChild(updateButton);
+        }
+
+        function formatTitle(title) {
+            // Convert camelCase to space-separated words
+            var formattedTitle = title.replace(/([a-z])([A-Z])/g, '$1 $2');
+
+            // Capitalize the first letter of each word
+            formattedTitle = formattedTitle.replace(/\b\w/g, function (match) {
+                return match.toUpperCase();
+            });
+
+            return formattedTitle;
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Activity</title>
+    <style>
+        body {
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            background-image:linear-gradient(to right,#251f33, #fa1e4e, #251f33);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .form-container {
+            background-color: #fff;
+            width: 50%;
+            padding: 5%;
+            border: 8% solid #000;
+            margin-top: 1%;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 20px;
+        }
+
+        button {
+            background-color: #007BFF;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="form-container">
+        <h2>Add Activity</h2>
+        <form id="activityForm" action="activities_details(teacher).php" method="post">
+            <label for="activityName">Activity Name:</label>
+            <input type="text" id="activityName" name="activityName" required>
+
+            <label for="activityDescription">Activity Description:</label>
+            <input type="text" id="activityDescription" name="activityDescription" required>
+
+            <label for="activityDate">Activity Date:</label>
+            <input type="date" id="activityDate" name="activityDate" required>
+
+            <label for="activityId">Activity ID:</label>
+            <input type="text" id="activityId" name="activityId" required>
+
+            <label for="organizerName">Activity By:</label>
+            <input type="text" id="organizerName" name="organizerName" required>
+
+            <button type="submit" onclick="ManageActivities()">Return</button>
+            <button type="submit" onclick="UploadActivity()">Upload</button>
+        </form>
+    </div>
+
+    <script>
+        function ManageActivities() {
+            window.location.href = 'Manage Activities (Teacher).html'
+        }
+        </script>
+</body>
+
+</html>

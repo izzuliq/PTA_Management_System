@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Announcements</title>
+    <style>
+        body {
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            background-image: linear-gradient(to right, #251f33, #fa1e4e, #251f33);
+        }
+
+        .title-box {
+            background-color: #f4f4f4;
+            padding: 1%;
+            border-radius: 8%;
+            text-align: center;
+            position: absolute;
+            top: 15%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border: 2px solid #000;
+        }
+
+        .home-button {
+            background-color: #007BFF;
+            color: #fff;
+            padding: 0.5%;
+            border: none;
+            border-radius: 8%;
+            cursor: pointer;
+            margin-top: 1.5%;
+            text-decoration: none;
+            display: inline-block;
+            position: absolute;
+            top: 7%;
+            left: 58%;
+        }
+
+        .logout-button {
+            background-color: #ff0000;
+            color: #fff;
+            padding: 0.5%;
+            border: none;
+            border-radius: 8%;
+            cursor: pointer;
+            margin-top: 1.2%;
+            text-decoration: none;
+            display: inline-block;
+            position: absolute;
+            top: 14%;
+            left: 57.5%;
+        }
+
+        .line {
+            width: 35.5%;
+            height: 0.2vw;
+            background-color: #000;
+            margin-top: 12%;
+            margin-left: 32.1%;
+        }
+
+        .box2 {
+            background-color: #fff;
+            width: 34.8%;
+            height: 50%;
+            margin: 20px auto;
+            border: 2px solid #000;
+            position: absolute;
+            top: 33.5%;
+            left: 32.4%;
+        }
+
+        .button-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .delete-button {
+            background-color: #007BFF;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            color: #fff;
+            padding: 1.4% 4.35%;
+            border: 100% solid #000000;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            position: absolute;
+            top: 28%;
+            left: 56.1%;
+        }
+
+        .view-button {
+            background-color: #007BFF;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            color: #fff;
+            padding: 1.4% 4.95%;
+            border: 100% solid #000000;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            position: absolute;
+            top: 28%;
+            left: 32.4%;
+        }
+
+        .add-button {
+            background-color: #007BFF;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            color: #fff;
+            padding: 1.4% 5.28%;
+            border: 100% solid #000000;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            position: absolute;
+            top: 28%;
+            left: 44%;
+        }
+
+        .checkbox-container {
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        .announcement-checkbox {
+            margin-right: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <img src="Logo.png" alt="Description of the image" id="logoImage"
+        style="position: absolute; top: 4.5%; right: 57%; width: 10%; height: 20%;">
+
+    <div class="title-box">
+        <h1>Announcements</h1>
+    </div>
+    <a href="Teacher Dashboard.html" class="home-button">HOME</a>
+    <a href="PTA Management System.html" class="logout-button">LOGOUT</a>
+    <div class="line"></div>
+    <div class="button-container">
+        <button class="view-button" onclick="GetAllAnnouncements()">View</button>
+        <button class="add-button" onclick="UploadAnnouncement()">Add</button>
+    </div>
+
+    <div class="box2" id="announcementIdBox"></div>
+
+    <div class="checkbox-container">
+        <button class="delete-button" onclick="DeleteAnnouncement()">Delete</button>
+    </div>
+
+    <script>
+
+        function GetAllAnnouncements() {
+            var selectedAnnouncementCheckbox = document.querySelector('.announcement-checkbox:checked');
+
+            if (selectedAnnouncementCheckbox) {
+                var selectedAnnouncementId = selectedAnnouncementCheckbox.value;
+                window.location.href = 'Announcements Details(Teacher).html?announcementId=' + selectedAnnouncementId;
+            } else {
+                alert('Please select an announcement to view details.');
+            }
+        }
+        function fetchAnnouncementIds() {
+            var xhr = new XMLHttpRequest();
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    var announcementIds = JSON.parse(xhr.responseText);
+                    displayAnnouncementIds(announcementIds);
+                }
+            };
+
+            xhr.open("GET", "get_announcements.php", true);
+            xhr.send();
+        }
+
+        function displayAnnouncementIds(announcementIds) {
+            var announcementIdBox = document.getElementById('announcementIdBox');
+
+            announcementIdBox.innerHTML = '';
+
+            announcementIds.forEach(function (announcementId) {
+                var announcementItem = document.createElement('div');
+                announcementItem.classList.add('announcement-item');
+                announcementItem.setAttribute('data-announcement-id', announcementId); // Store announcementId as data attribute
+
+                var announcementCheckbox = document.createElement('input');
+                announcementCheckbox.type = 'checkbox';
+                announcementCheckbox.value = announcementId;
+                announcementCheckbox.classList.add('announcement-checkbox');
+
+                var announcementIdSpan = document.createElement('span');
+                announcementIdSpan.textContent = 'Announcement ID: ' + announcementId;
+
+                announcementItem.appendChild(announcementCheckbox);
+                announcementItem.appendChild(announcementIdSpan);
+
+                announcementItem.addEventListener('click', function () {
+                    showAnnouncementDetails(announcementId); // Function to display details for the selected announcement
+                });
+
+                announcementIdBox.appendChild(announcementItem);
+            });
+        }
+
+        window.onload = function () {
+            fetchAnnouncementIds();
+        };
+
+        function showAnnouncementDetails(announcementId) {
+            // Fetch details for the selected announcementId (implement this based on your server/backend logic)
+            var xhr = new XMLHttpRequest();
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    var announcementDetails = JSON.parse(xhr.responseText);
+                    displayAnnouncementDetails(announcementDetails);
+                }
+            };
+
+            xhr.open("GET", "get_announcement_details.php?announcementId=" + announcementId, true);
+            xhr.send();
+        }
+
+        function displayAnnouncementDetails(announcementDetails) {
+            var announcementDetailsBox = document.getElementById('announcementDetailsBox');
+            announcementDetailsBox.innerHTML = '';
+
+            // Create HTML elements to display details (customize based on your requirements)
+            var detailsHeading = document.createElement('h2');
+            detailsHeading.textContent = 'Announcement Details';
+
+            var detailsList = document.createElement('ul');
+            // Populate detailsList with the details from the announcementDetails object
+
+            announcementDetailsBox.appendChild(detailsHeading);
+            announcementDetailsBox.appendChild(detailsList);
+        }
+
+        function UploadAnnouncement() {
+            window.location.href = 'Add Announcements (Teacher).html';
+        }
+
+        function DeleteAnnouncement() {
+            var selectedAnnouncementCheckbox = document.querySelector('.announcement-checkbox:checked');
+
+            if (selectedAnnouncementCheckbox) {
+                var selectedAnnouncementId = selectedAnnouncementCheckbox.value;
+
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", "delete_announcement.php", true);
+                xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState == 4 && xhr.status == 200) {
+                        var response = JSON.parse(xhr.responseText);
+                        if (response.status === "success") {
+                            // Deletion successful, you can update the UI or take any other actions
+                            alert("Announcement deleted successfully");
+                            fetchAnnouncementIds(); // Refresh the announcement list after deletion
+                        } else {
+                            // Handle error
+                            alert("Error deleting announcement: " + response.message);
+                        }
+                    }
+                };
+                xhr.send("announcementId=" + selectedAnnouncementId);
+            } else {
+                alert('Please select an announcement to delete.');
+            }
+        }
+
+
+    </script>
+</body>
+
+</html>

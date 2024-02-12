@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Dependencies</title>
+    <style>
+        body {
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            background-image: linear-gradient(to right, #251f33, #fa1e4e, #251f33);
+        }
+
+        .title-box {
+            background-color: #f4f4f4;
+            padding: 1%;
+            border-radius: 8%;
+            text-align: center;
+            position: absolute;
+            top: 15%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border: 2px solid #000;
+        }
+
+        .home-button {
+            background-color: #007BFF;
+            color: #fff;
+            padding: 0.5%;
+            border: none;
+            border-radius: 8%;
+            cursor: pointer;
+            margin-top: 1.5%;
+            text-decoration: none;
+            display: inline-block;
+            position: absolute;
+            top: 7%;
+            left: 61.59%;
+        }
+
+        .logout-button {
+            background-color: #ff0000;
+            color: #fff;
+            padding: 0.5%;
+            border: none;
+            border-radius: 8%;
+            cursor: pointer;
+            margin-top: 1.2%;
+            text-decoration: none;
+            display: inline-block;
+            position: absolute;
+            top: 14%;
+            left: 61%;
+        }
+
+        .line {
+            width: 35.5%;
+            height: 0.2vw;
+            background-color: #000;
+            margin-top: 12%;
+            margin-left: 32.1%;
+        }
+
+        .box2 {
+            background-color: #fff;
+            width: 34.8%;
+            height: 50%;
+            margin: 20px auto;
+            border: 2px solid #000;
+            position: absolute;
+            top: 33.5%;
+            left: 32.4%;
+        }
+
+        .button-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .delete-button {
+            background-color: #007BFF;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            color: #fff;
+            padding: 1.4% 4.35%;
+            border: 100% solid #000000;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            position: absolute;
+            top: 28%;
+            left: 56.1%;
+        }
+
+        .view-button {
+            background-color: #007BFF;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            color: #fff;
+            padding: 1.4% 4.95%;
+            border: 100% solid #000000;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            position: absolute;
+            top: 28%;
+            left: 32.4%;
+        }
+
+        .add-button {
+            background-color: #007BFF;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            color: #fff;
+            padding: 1.4% 5.28%;
+            border: 100% solid #000000;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            position: absolute;
+            top: 28%;
+            left: 44%;
+        }
+
+        .checkbox-container {
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        .archive-checkbox {
+            margin-right: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <img src="Logo.png" alt="Description of the image" id="logoImage"
+        style="position: absolute; top: 4.5%; right: 59.5%; width: 10%; height: 20%;">
+    <div class="title-box">
+        <h1>DEPENDENCIES</h1>
+    </div>
+    <a href="Teacher Dashboard.html" class="home-button">HOME</a>
+    <a href="PTA Management System.html" class="logout-button">LOGOUT</a>
+    <div class="line"></div>
+    <div class="button-container">
+        <button class="view-button" onclick="GetAllDependencies()">View</button>
+        <button class="add-button" onclick="CreateDependency()">Add</button>
+    </div>
+
+    <div class="box2" id="dependencyIdBox"></div>
+
+    <div class="checkbox-container">
+        <button class="delete-button" onclick="DeleteDependency()">Delete</button>
+    </div>
+
+    <script>
+
+        function CreateDependency() {
+            window.location.href = 'Add Dependencies (Teacher).html';
+        }
+        function GetAllDependencies() {
+            var selectedDependencyCheckbox = document.querySelector('.dependency-checkbox:checked');
+
+            if (selectedDependencyCheckbox) {
+                var selectedDependencyId = selectedDependencyCheckbox.value;
+                window.location.href = 'Dependency Details (Teacher).html?dependencyId=' + selectedDependencyId;
+            } else {
+                alert('Please select a dependency to view details.');
+            }
+        }
+
+        function fetchDependencyIds() {
+            var xhr = new XMLHttpRequest();
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    var dependencyIds = JSON.parse(xhr.responseText);
+                    displayDependencyIds(dependencyIds);
+                }
+            };
+
+            xhr.open("GET", "get_dependencies.php", true);
+            xhr.send();
+        }
+
+        function displayDependencyIds(dependencyIds) {
+            var dependencyIdBox = document.getElementById('dependencyIdBox');
+
+            dependencyIdBox.innerHTML = '';
+
+            dependencyIds.forEach(function (dependencyId) {
+                var dependencyItem = document.createElement('div');
+                dependencyItem.classList.add('dependency-item');
+                dependencyItem.setAttribute('data-dependency-id', dependencyId);
+
+                var dependencyCheckbox = document.createElement('input');
+                dependencyCheckbox.type = 'checkbox';
+                dependencyCheckbox.value = dependencyId;
+                dependencyCheckbox.classList.add('dependency-checkbox');
+
+                var dependencyIdSpan = document.createElement('span');
+                dependencyIdSpan.textContent = 'Dependency ID: ' + dependencyId;
+
+                dependencyItem.appendChild(dependencyCheckbox);
+                dependencyItem.appendChild(dependencyIdSpan);
+
+                dependencyItem.addEventListener('click', function () {
+                    showDependencyDetails(dependencyId);
+                });
+
+                dependencyIdBox.appendChild(dependencyItem);
+            });
+        }
+
+        window.onload = function () {
+            fetchDependencyIds();
+        };
+
+        function showDependencyDetails(dependency) {
+            var xhr = new XMLHttpRequest();
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    var dependencyDetails = JSON.parse(xhr.responseText);
+                    displayDependencyDetails(dependencyDetails);
+                }
+            };
+
+            xhr.open("GET", "get_dependency_details.php?dependencyId=" + dependencyId, true);
+            xhr.send();
+        }
+
+        function displayDependencyDetails(dependencyDetails) {
+            var dependencyDetailsBox = document.getElementById('dependencyDetailsBox');
+            dependencyDetailsBox.innerHTML = '';
+
+            // Create HTML elements to display details (customize based on your requirements)
+            var detailsHeading = document.createElement('h2');
+            detailsHeading.textContent = 'Dependency Details';
+
+            var detailsList = document.createElement('ul');
+            // Populate detailsList with the details from the dependencyDetails object
+
+            dependencyDetailsBox.appendChild(detailsHeading);
+            dependencyDetailsBox.appendChild(detailsList);
+        }
+
+        function DeleteDependency() {
+            var selectedDependencyCheckbox = document.querySelector('.dependency-checkbox:checked');
+
+            if (selectedDependencyCheckbox) {
+                var selectedDependencyId = selectedDependencyCheckbox.value;
+
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", "delete_dependency.php", true);
+                xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState == 4 && xhr.status == 200) {
+                        var response = JSON.parse(xhr.responseText);
+                        if (response.status === "success") {
+                            alert("Dependency deleted successfully");
+                            fetchDependencyIds();
+                        } else {
+                            // Handle error
+                            alert("Error deleting dependency: " + response.message);
+                        }
+                    }
+                };
+                xhr.send("dependencyId=" + selectedDependencyId);
+            } else {
+                alert('Please select a dependency to delete.');
+            }
+        }
+
+    </script>
+</body>
+
+</html>

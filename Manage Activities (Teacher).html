@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Activities</title>
+    <style>
+        body {
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            background-image: linear-gradient(to right, #251f33, #fa1e4e, #251f33);
+        }
+
+        .title-box {
+            background-color: #f4f4f4;
+            padding: 1%;
+            border-radius: 8%;
+            text-align: center;
+            position: absolute;
+            top: 15%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border: 2px solid #000;
+        }
+
+        .home-button {
+            background-color: #007BFF;
+            color: #fff;
+            padding: 0.5%;
+            border: none;
+            border-radius: 8%;
+            cursor: pointer;
+            margin-top: 1.5%;
+            text-decoration: none;
+            display: inline-block;
+            position: absolute;
+            top: 7%;
+            left: 58%;
+        }
+
+        .logout-button {
+            background-color: #ff0000;
+            color: #fff;
+            padding: 0.5%;
+            border: none;
+            border-radius: 8%;
+            cursor: pointer;
+            margin-top: 1.2%;
+            text-decoration: none;
+            display: inline-block;
+            position: absolute;
+            top: 14%;
+            left: 57.5%;
+        }
+
+        .line {
+            width: 35.5%;
+            height: 0.2vw;
+            background-color: #000;
+            margin-top: 12%;
+            margin-left: 32.1%;
+        }
+
+        .box2 {
+            background-color: #fff;
+            width: 34.8%;
+            height: 50%;
+            margin: 20px auto;
+            border: 2px solid #000;
+            position: absolute;
+            top: 33.5%;
+            left: 32.4%;
+        }
+
+        .button-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .delete-button {
+            background-color: #007BFF;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            color: #fff;
+            padding: 1.4% 4.35%;
+            border: 100% solid #000000;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            position: absolute;
+            top: 28%;
+            left: 56.1%;
+        }
+
+        .view-button {
+            background-color: #007BFF;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            color: #fff;
+            padding: 1.4% 4.95%;
+            border: 100% solid #000000;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            position: absolute;
+            top: 28%;
+            left: 32.4%;
+        }
+
+        .add-button {
+            background-color: #007BFF;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            color: #fff;
+            padding: 1.4% 5.28%;
+            border: 100% solid #000000;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            position: absolute;
+            top: 28%;
+            left: 44%;
+        }
+
+        .checkbox-container {
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        .activity-checkbox {
+            margin-right: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <img src="Logo.png" alt="Description of the image" id="logoImage"
+        style="position: absolute; top: 4.5%; right: 57%; width: 10%; height: 20%;">
+
+    <div class="title-box">
+        <h1>Activities</h1>
+    </div>
+    <a href="Teacher Dashboard.html" class="home-button">HOME</a>
+    <a href="PTA Management System.html" class="logout-button">LOGOUT</a>
+    <div class="line"></div>
+    <div class="button-container">
+        <button class="view-button" onclick="GetAllActivities()">View</button>
+        <button class="add-button" onclick="UploadActivity()">Add</button>
+    </div>
+
+    <div class="box2" id="activityIdBox"></div>
+
+    <div class="checkbox-container">
+        <button class="delete-button" onclick="DeleteActivity()">Delete</button>
+    </div>
+
+    <script>
+
+        function GetAllActivities() {
+            var selectedActivityCheckbox = document.querySelector('.activity-checkbox:checked');
+
+            if (selectedActivityCheckbox) {
+                var selectedActivityId = selectedActivityCheckbox.value;
+                window.location.href = 'Activities Details(Teacher).html?activityId=' + selectedActivityId;
+            } else {
+                alert('Please select an activity to view details.');
+            }
+        }
+        function fetchActivityIds() {
+            var xhr = new XMLHttpRequest();
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    var activityIds = JSON.parse(xhr.responseText);
+                    displayActivityIds(activityIds);
+                }
+            };
+
+            xhr.open("GET", "get_activities.php", true);
+            xhr.send();
+        }
+
+        function displayActivityIds(activityIds) {
+            var activityIdBox = document.getElementById('activityIdBox');
+
+            activityIdBox.innerHTML = '';
+
+            activityIds.forEach(function (activityId) {
+                var activityItem = document.createElement('div');
+                activityItem.classList.add('activity-item');
+                activityItem.setAttribute('data-activity-id', activityId); // Store activityId as data attribute
+
+                var activityCheckbox = document.createElement('input');
+                activityCheckbox.type = 'checkbox';
+                activityCheckbox.value = activityId;
+                activityCheckbox.classList.add('activity-checkbox');
+
+                var activityIdSpan = document.createElement('span');
+                activityIdSpan.textContent = 'Activity ID: ' + activityId;
+
+                activityItem.appendChild(activityCheckbox);
+                activityItem.appendChild(activityIdSpan);
+
+                activityItem.addEventListener('click', function () {
+                    showActivityDetails(activityId); // Function to display details for the selected activity
+                });
+
+                activityIdBox.appendChild(activityItem);
+            });
+        }
+
+        window.onload = function () {
+            fetchActivityIds();
+        };
+
+        function showActivityDetails(activityId) {
+            // Fetch details for the selected activityId (implement this based on your server/backend logic)
+            var xhr = new XMLHttpRequest();
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    var activityDetails = JSON.parse(xhr.responseText);
+                    displayActivityDetails(activityDetails);
+                }
+            };
+
+            xhr.open("GET", "get_activity_details.php?activityId=" + activityId, true);
+            xhr.send();
+        }
+
+        function displayActivityDetails(activityDetails) {
+            var activityDetailsBox = document.getElementById('activityDetailsBox');
+            activityDetailsBox.innerHTML = '';
+
+            // Create HTML elements to display details (customize based on your requirements)
+            var detailsHeading = document.createElement('h2');
+            detailsHeading.textContent = 'Activity Details';
+
+            var detailsList = document.createElement('ul');
+            // Populate detailsList with the details from the activityDetails object
+
+            activityDetailsBox.appendChild(detailsHeading);
+            activityDetailsBox.appendChild(detailsList);
+        }
+
+        function UploadActivity() {
+            window.location.href = 'Add Activities (Teacher).html';
+        }
+
+        function DeleteActivity() {
+            var selectedActivityCheckbox = document.querySelector('.activity-checkbox:checked');
+
+            if (selectedActivityCheckbox) {
+                var selectedActivityId = selectedActivityCheckbox.value;
+
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", "delete_activity.php", true);
+                xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState == 4 && xhr.status == 200) {
+                        var response = JSON.parse(xhr.responseText);
+                        if (response.status === "success") {
+                            // Deletion successful, you can update the UI or take any other actions
+                            alert("Activity deleted successfully");
+                            fetchActivityIds(); // Refresh the activity list after deletion
+                        } else {
+                            // Handle error
+                            alert("Error deleting activity: " + response.message);
+                        }
+                    }
+                };
+                xhr.send("activityId=" + selectedActivityId);
+            } else {
+                alert('Please select an activity to delete.');
+            }
+        }
+
+
+    </script>
+</body>
+
+</html>

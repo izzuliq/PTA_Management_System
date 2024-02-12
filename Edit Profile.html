@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Profile</title>
+    <style>
+
+        body {
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            background-image:linear-gradient(to right,#251f33, #fa1e4e, #251f33);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .form-container {
+            background-color: #fff;
+            width: 50%;
+            padding: 5%;
+            border: 8% solid #000;
+            margin-top: 1%;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 20px;
+        }
+
+        button {
+            background-color: #007BFF;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="form-container" id="editProfileBox">
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
+
+            if (loggedInUser) {
+                var editProfileBox = document.getElementById('editProfileBox');
+
+                editProfileBox.innerHTML = '<h2>Edit Profile</h2>' +
+                    '<label for="username">Username:</label>' +
+                    '<input type="text" id="username" name="username" value="' + loggedInUser.username + '" required>' +
+
+                    '<label for="email">Password:</label>' +
+                    '<input type="text" id="password" name="password" value="' + loggedInUser.password + '" required>' +
+
+                    '<label for="role">User ID:</label>' +
+                    '<input type="text" id="userId" name="userId" value="' + loggedInUser.userId + '" required>' +
+
+                    '<label for="role">Role (NOTE: Role cannot be altered!):</label>' +
+                    '<input type="text" id="role" name="role" value="' + loggedInUser.role + '" readonly>' +
+
+                    '<button type="submit" onclick="ReturnToDashboard()" style="margin-right: 10px;">Return</button>' +
+                    '<button type="submit" onclick="UpdateProfile()">Update</button>';
+            }
+        });
+
+        function ReturnToDashboard() {
+            var userRole = getUserRole();
+
+            if (userRole === 'admin') {
+                window.location.href = 'Admin Dashboard.html';
+            } else if (userRole === 'teacher') {
+                window.location.href = 'Teacher Dashboard.html';
+            } else if (userRole === 'parent') {
+                window.location.href = 'Parent Dashboard.html';
+            }
+        }
+
+        function UpdateProfile() {
+            var loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
+
+            if (loggedInUser) {
+                loggedInUser.username = document.getElementById('username').value;
+                loggedInUser.email = document.getElementById('password').value;
+                loggedInUser.email = document.getElementById('userId').value;
+                loggedInUser.email = document.getElementById('role').value;
+
+                localStorage.setItem('loggedInUser', JSON.stringify(loggedInUser));
+
+                alert('Profile has been updated!');
+            } else {
+                alert('Error: User not found.');
+            }
+        }
+
+        function getUserRole() {
+            var loggedInUser = localStorage.getItem('loggedInUser');
+
+            if (loggedInUser) {
+                var user = JSON.parse(loggedInUser);
+                return user.role;
+            } else {
+                return 'default';
+            }
+        }
+    </script>
+</body>
+
+</html>

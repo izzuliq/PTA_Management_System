@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Archives</title>
+    <style>
+        body {
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            background-image: linear-gradient(to right, #251f33, #fa1e4e, #251f33);
+        }
+
+        .title-box {
+            background-color: #f4f4f4;
+            padding: 1%;
+            border-radius: 8%;
+            text-align: center;
+            position: absolute;
+            top: 15%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border: 2px solid #000;
+        }
+
+        .home-button {
+            background-color: #007BFF;
+            color: #fff;
+            padding: 0.5%;
+            border: none;
+            border-radius: 8%;
+            cursor: pointer;
+            margin-top: 1.5%;
+            text-decoration: none;
+            display: inline-block;
+            position: absolute;
+            top: 7%;
+            left: 58%;
+        }
+
+        .logout-button {
+            background-color: #ff0000;
+            color: #fff;
+            padding: 0.5%;
+            border: none;
+            border-radius: 8%;
+            cursor: pointer;
+            margin-top: 1.2%;
+            text-decoration: none;
+            display: inline-block;
+            position: absolute;
+            top: 14%;
+            left: 57.5%;
+        }
+
+        .line {
+            width: 35.5%;
+            height: 0.2vw;
+            background-color: #000;
+            margin-top: 12%;
+            margin-left: 32.1%;
+        }
+
+        .box2 {
+            background-color: #fff;
+            width: 34.8%;
+            height: 50%;
+            margin: 20px auto;
+            border: 2px solid #000;
+            position: absolute;
+            top: 33.5%;
+            left: 32.4%;
+        }
+
+        .button-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .delete-button {
+            background-color: #007BFF;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            color: #fff;
+            padding: 1.4% 4.35%;
+            border: 100% solid #000000;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            position: absolute;
+            top: 28%;
+            left: 56.1%;
+        }
+
+        .view-button {
+            background-color: #007BFF;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            color: #fff;
+            padding: 1.4% 4.95%;
+            border: 100% solid #000000;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            position: absolute;
+            top: 28%;
+            left: 32.4%;
+        }
+
+        .add-button {
+            background-color: #007BFF;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            color: #fff;
+            padding: 1.4% 5.28%;
+            border: 100% solid #000000;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            position: absolute;
+            top: 28%;
+            left: 44%;
+        }
+
+        .checkbox-container {
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        .archive-checkbox {
+            margin-right: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <img src="Logo.png" alt="Description of the image" id="logoImage"
+        style="position: absolute; top: 4.5%; right: 57%; width: 10%; height: 20%;">
+
+    <div class="title-box">
+        <h1>ARCHIVES</h1>
+    </div>
+    <a href="Teacher Dashboard.html" class="home-button">HOME</a>
+    <a href="PTA Management System.html" class="logout-button">LOGOUT</a>
+    <div class="line"></div>
+    <div class="button-container">
+        <button class="view-button" onclick="GetAllArchives()">View</button>
+        <button class="add-button" onclick="UploadArchive()">Add</button>
+    </div>
+
+    <div class="box2" id="archiveIdBox"></div>
+
+    <div class="checkbox-container">
+        <button class="delete-button" onclick="DeleteArchive()">Delete</button>
+    </div>
+
+    <script>
+
+        function GetAllArchives() {
+            var selectedArchiveCheckbox = document.querySelector('.archive-checkbox:checked');
+
+            if (selectedArchiveCheckbox) {
+                var selectedArchiveId = selectedArchiveCheckbox.value;
+                window.location.href = 'Archives Details(Teacher).html?archiveId=' + selectedArchiveId;
+            } else {
+                alert('Please select an archive to view details.');
+            }
+        }
+        function fetchArchiveIds() {
+            var xhr = new XMLHttpRequest();
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    var archiveIds = JSON.parse(xhr.responseText);
+                    displayArchiveIds(archiveIds);
+                }
+            };
+
+            xhr.open("GET", "get_archives.php", true);
+            xhr.send();
+        }
+
+        function displayArchiveIds(archiveIds) {
+            var archiveIdBox = document.getElementById('archiveIdBox');
+
+            archiveIdBox.innerHTML = '';
+
+            archiveIds.forEach(function (archiveId) {
+                var archiveItem = document.createElement('div');
+                archiveItem.classList.add('archive-item');
+                archiveItem.setAttribute('data-archive-id', archiveId); // Store archiveId as data attribute
+
+                var archiveCheckbox = document.createElement('input');
+                archiveCheckbox.type = 'checkbox';
+                archiveCheckbox.value = archiveId;
+                archiveCheckbox.classList.add('archive-checkbox');
+
+                var archiveIdSpan = document.createElement('span');
+                archiveIdSpan.textContent = 'Archive ID: ' + archiveId;
+
+                archiveItem.appendChild(archiveCheckbox);
+                archiveItem.appendChild(archiveIdSpan);
+
+                archiveItem.addEventListener('click', function () {
+                    showArchiveDetails(archiveId); // Function to display details for the selected archive
+                });
+
+                archiveIdBox.appendChild(archiveItem);
+            });
+        }
+
+        window.onload = function () {
+            fetchArchiveIds();
+        };
+
+        function showArchiveDetails(archiveId) {
+            // Fetch details for the selected archiveId (implement this based on your server/backend logic)
+            var xhr = new XMLHttpRequest();
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    var archiveDetails = JSON.parse(xhr.responseText);
+                    displayArchiveDetails(archiveDetails);
+                }
+            };
+
+            xhr.open("GET", "get_archive_details.php?archiveId=" + archiveId, true);
+            xhr.send();
+        }
+
+        function displayArchiveDetails(archiveDetails) {
+            var archiveDetailsBox = document.getElementById('archiveDetailsBox');
+            archiveDetailsBox.innerHTML = '';
+
+            // Create HTML elements to display details (customize based on your requirements)
+            var detailsHeading = document.createElement('h2');
+            detailsHeading.textContent = 'Archive Details';
+
+            var detailsList = document.createElement('ul');
+            // Populate detailsList with the details from the archiveDetails object
+
+            archiveDetailsBox.appendChild(detailsHeading);
+            archiveDetailsBox.appendChild(detailsList);
+        }
+
+        function UploadArchive() {
+            window.location.href = 'Add Archives (Teacher).html';
+        }
+
+        function DeleteArchive() {
+            var selectedArchiveCheckbox = document.querySelector('.archive-checkbox:checked');
+
+            if (selectedArchiveCheckbox) {
+                var selectedArchiveId = selectedArchiveCheckbox.value;
+
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", "delete_archive.php", true);
+                xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState == 4 && xhr.status == 200) {
+                        var response = JSON.parse(xhr.responseText);
+                        if (response.status === "success") {
+                            // Deletion successful, you can update the UI or take any other actions
+                            alert("Archive deleted successfully");
+                            fetchArchiveIds(); // Refresh the archive list after deletion
+                        } else {
+                            // Handle error
+                            alert("Error deleting archive: " + response.message);
+                        }
+                    }
+                };
+                xhr.send("archiveId=" + selectedArchiveId);
+            } else {
+                alert('Please select an archive to delete.');
+            }
+        }
+
+
+    </script>
+</body>
+
+</html>
